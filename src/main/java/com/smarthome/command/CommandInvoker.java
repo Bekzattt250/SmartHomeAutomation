@@ -1,20 +1,18 @@
 package com.smarthome.command;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
-
+import java.util.Objects;
 public class CommandInvoker {
     private final Deque<Command> history = new ArrayDeque<>();
     public void executeCommand(Command command) {
-        command.execute();
+        Objects.requireNonNull(command).execute();
         history.push(command);
     }
-    public void undoLastCommand() {
-        if (history.isEmpty()) {
-            System.out.println("There is no command to undo.");
-            return;
-        }
-        history.pop().undo();
-        System.out.println("Last command was undone.");
+    public boolean undoLastCommand() {
+        if (history.isEmpty()) return false;
+        history.peek().undo();
+        history.pop();
+        return true;
     }
+    public int historySize() { return history.size(); }
 }

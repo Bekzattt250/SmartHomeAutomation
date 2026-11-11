@@ -1,0 +1,31 @@
+@startuml
+actor User
+participant Main
+participant SmartHomeFacade as Facade
+participant AwayMode as Strategy
+participant CompositeCommand as Composite
+participant CommandInvoker as Invoker
+participant ZigbeeAdapter as Adapter
+participant Thermostat
+participant DoorLock
+participant StateStore as Store
+User -> Main: Select AWAY mode
+Main -> Facade: activateMode("3")
+Facade -> Strategy: commands(light, thermostat, doorLock)
+Strategy --> Facade: command list
+Facade -> Invoker: executeCommand(Composite)
+Invoker -> Composite: execute()
+Composite -> Adapter: turnOff()
+Composite -> Thermostat: setTemperature(17)
+Composite -> DoorLock: turnOn()
+Invoker --> Facade: done
+Facade -> Store: save(state)
+User -> Main: Undo
+Main -> Facade: undoLastCommand()
+Facade -> Invoker: undoLastCommand()
+Invoker -> Composite: undo()
+Composite -> DoorLock: restore previous
+Composite -> Thermostat: restore previous
+Composite -> Adapter: restore previous
+Facade -> Store: save(state)
+@enduml

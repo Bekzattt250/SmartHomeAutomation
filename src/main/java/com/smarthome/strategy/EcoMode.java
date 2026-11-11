@@ -1,15 +1,10 @@
 package com.smarthome.strategy;
-
-import com.smarthome.devices.DoorLock;
-import com.smarthome.devices.SmartDevice;
-import com.smarthome.devices.Thermostat;
-
+import com.smarthome.command.*;
+import com.smarthome.devices.*;
+import java.util.List;
 public class EcoMode implements AutomationStrategy {
-    @Override public String getName() { return "ECO"; }
-    @Override public void apply(SmartDevice light, Thermostat thermostat, DoorLock doorLock) {
-        light.turnOff();
-        thermostat.setTemperature(19);
-        doorLock.turnOn();
-        System.out.println("Eco mode activated: energy use is reduced.");
+    public String getName() { return "ECO"; }
+    public List<Command> commands(SmartDevice light, Thermostat thermostat, DoorLock doorLock) {
+        return List.of(new TurnOffCommand(light), new SetTemperatureCommand(thermostat, 19), new TurnOnCommand(doorLock));
     }
 }

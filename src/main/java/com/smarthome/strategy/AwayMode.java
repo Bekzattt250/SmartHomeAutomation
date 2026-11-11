@@ -1,15 +1,10 @@
 package com.smarthome.strategy;
-
-import com.smarthome.devices.DoorLock;
-import com.smarthome.devices.SmartDevice;
-import com.smarthome.devices.Thermostat;
-
+import com.smarthome.command.*;
+import com.smarthome.devices.*;
+import java.util.List;
 public class AwayMode implements AutomationStrategy {
-    @Override public String getName() { return "AWAY"; }
-    @Override public void apply(SmartDevice light, Thermostat thermostat, DoorLock doorLock) {
-        light.turnOff();
-        thermostat.setTemperature(17);
-        doorLock.turnOn();
-        System.out.println("Away mode activated: the home is secured.");
+    public String getName() { return "AWAY"; }
+    public List<Command> commands(SmartDevice light, Thermostat thermostat, DoorLock doorLock) {
+        return List.of(new TurnOffCommand(light), new SetTemperatureCommand(thermostat, 17), new TurnOnCommand(doorLock));
     }
 }

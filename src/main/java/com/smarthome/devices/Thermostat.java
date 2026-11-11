@@ -1,20 +1,21 @@
 package com.smarthome.devices;
-
 public class Thermostat implements SmartDevice {
     private int temperature = 22;
     private boolean enabled = true;
-    @Override public String getName() { return "Thermostat"; }
-    @Override public String getStatus() { return enabled ? temperature + " C (active)" : "OFF"; }
-    @Override public void turnOn() { enabled = true; System.out.println("Thermostat is active."); }
-    @Override public void turnOff() { enabled = false; System.out.println("Thermostat is OFF."); }
-    public void setTemperature(int temperature) {
-        if (temperature < 16 || temperature > 30) {
-            System.out.println("Temperature must be between 16 and 30 C.");
-            return;
-        }
-        this.temperature = temperature;
+    public String getName() { return "Thermostat"; }
+    public String getStatus() { return enabled ? temperature + " C (active)" : "OFF"; }
+    public boolean isOn() { return enabled; }
+    public void turnOn() { enabled = true; System.out.println("Thermostat is active."); }
+    public void turnOff() { enabled = false; System.out.println("Thermostat is OFF."); }
+    public void setTemperature(int value) {
+        if (value < 16 || value > 30) throw new IllegalArgumentException("Temperature must be between 16 and 30 C.");
+        temperature = value;
         enabled = true;
-        System.out.println("Thermostat temperature set to " + temperature + " C.");
+        System.out.println("Thermostat temperature set to " + value + " C.");
     }
     public int getTemperature() { return temperature; }
+    public void restore(int value, boolean active) {
+        setTemperature(value);
+        if (!active) turnOff();
+    }
 }

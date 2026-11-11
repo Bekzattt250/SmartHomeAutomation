@@ -1,5 +1,4 @@
 package com.smarthome.adapter;
-
 public class LegacyZigbeeBulb {
     private boolean powered;
     public void powerOn() { powered = true; System.out.println("Zigbee bulb: power ON."); }
